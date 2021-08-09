@@ -6,5 +6,31 @@
     <script src="https://unpkg.com/launchdarkly-js-client-sdk@2"></script>
   </head>
   <body>
+    <script>
+    var user = {
+      firstName: 'Bob',
+      lastName: 'Loblaw',
+      key: 'UNIQUE IDENTIFIER',
+      custom: {
+        groups: 'beta_testers'
+      }
+    };
+
+    var div = document.createElement('div');
+    document.body.appendChild(div);
+
+    div.appendChild(document.createTextNode('Initializing...'));
+
+    var ldclient = LDClient.initialize('61119e9db1b688264218e5af', user);
+
+    function render() {
+      var shouldShow = ldclient.variation('stuffand-junk', false);
+      var label = (shouldShow ? 'Showing' : 'Not showing') + ' your feature to ' + user.key;
+      div.replaceChild(document.createTextNode(label), div.firstChild);
+    }
+
+    ldclient.on('ready', render);
+    ldclient.on('change', render);
+    </script>
   </body>
 </html>
